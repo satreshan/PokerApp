@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HighCard.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">poker</a> &gt; <a href="index.source.html" class="el_package">com.sap.ase.poker.model.hands</a> &gt; <span class="el_source">HighCard.java</span></div><h1>HighCard.java</h1><pre class="source lang-java linenums">package com.sap.ase.poker.model.hands;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.sap.ase.poker.model.deck.Card;
+
+public class HighCard extends Hand {
+
+    public static final int HIGH_CARD_RANK = 1;
+
+    public HighCard(List&lt;Card&gt; cards) {
+<span class="fc" id="L14">        super(cards);</span>
+<span class="fc" id="L15">    }</span>
+
+    @Override
+    public int getRank() {
+<span class="fc" id="L19">        return HIGH_CARD_RANK;</span>
+    }
+
+    @Override
+    protected List&lt;Card&gt; findRelevantCards(List&lt;Card&gt; cards) {
+<span class="fc" id="L24">        List&lt;Card&gt; restCards =</span>
+<span class="pc bpc" id="L25" title="1 of 2 branches missed.">                cards.stream().filter(card -&gt; !getCards().contains(card)).sorted(Card::compareTo)</span>
+<span class="fc" id="L26">                        .collect(Collectors.toList());</span>
+<span class="fc" id="L27">        return restCards.subList(restCards.size() - 5, restCards.size());</span>
+    }
+
+    @Override
+    protected int compareRelevantCards(Hand hand) {
+<span class="fc" id="L32">        List&lt;Card&gt; relevantCards1 = this.getRelevantCards();</span>
+<span class="fc" id="L33">        List&lt;Card&gt; relevantCards2 = hand.getRelevantCards();</span>
+
+        //ensure descending ordering of cards (e.g. ACE, KING, ...
+<span class="fc" id="L36">        Collections.sort(relevantCards1, Collections.reverseOrder(Card::compareTo));</span>
+<span class="fc" id="L37">        Collections.sort(relevantCards2, Collections.reverseOrder(Card::compareTo));</span>
+
+<span class="fc bfc" id="L39" title="All 2 branches covered.">        for (int i = 0; i &lt; relevantCards1.size(); i++) {</span>
+<span class="fc" id="L40">            Card card1 = relevantCards1.get(i);</span>
+<span class="fc" id="L41">            Card card2 = relevantCards2.get(i);</span>
+
+<span class="fc" id="L43">            int cardComparisonResult = card1.compareTo(card2);</span>
+<span class="fc bfc" id="L44" title="All 2 branches covered.">            if (cardComparisonResult != 0) {</span>
+<span class="fc" id="L45">                return cardComparisonResult;</span>
+            }
+        }
+
+<span class="fc" id="L49">        return 0;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
